@@ -1,54 +1,51 @@
 # Phishing Email Detection & Investigation Lab
 
-**SOC Level 1 | Email Security | Threat Analysis | Incident Response**
+**SOC Level 1 | Email Security | Header Analysis | Incident Response**
+
+**Project status: Completed — two synthetic training case studies (11 November 2026).** This is a simulated desktop investigation, not a live phishing investigation.
 
 ## Overview
-A hands-on blue-team portfolio project focused on investigating suspicious emails using a repeatable SOC analyst workflow. The lab will assess email authentication, sender identity, links and attachments, indicators of compromise (IOCs), and appropriate incident-response actions.
+This portfolio lab demonstrates how an entry-level SOC analyst can triage suspicious email, interpret email authentication, identify social-engineering indicators, assess URLs safely, and write an evidence-aware incident report. The samples and authentication results are fictional; no real sender, delivery, clicked link, endpoint or compromised account was investigated.
 
-**Project status:** In progress — investigation and findings will be added as the lab is completed.
+## Completed case studies
 
-## Objectives
-- Triage a suspicious email and document the initial indicators.
-- Examine email headers and assess SPF, DKIM, and DMARC results.
-- Investigate sender domains, reply-to mismatches, suspicious URLs, and attachment metadata safely.
-- Correlate relevant IOCs with reputable threat-intelligence sources.
-- Classify the message based on evidence and recommend containment and escalation actions.
-- Produce a concise SOC investigation case study with reproducible evidence.
+### Case 001 — Simulated Helpdesk Impersonation
+- [Synthetic email](samples/sample-001-synthetic-phishing.md)
+- [Initial triage notes](analysis/sample-001-initial-triage.md)
+- [Detailed header analysis](analysis/sample-001-detailed-header-analysis.md)
+- [Incident response summary](reports/sample-001-incident-response-summary.md)
+- [Final case study — PHISH-LAB-001](reports/PHISH-LAB-001-final-case-study.md)
 
-## Planned Investigation Workflow
-1. **Intake & triage:** Record the alert, source, subject, timestamps, and reported behaviour.
-2. **Header analysis:** Examine From, Reply-To, Return-Path, Received headers, and authentication results.
-3. **IOC extraction:** Defang URLs/domains and record hashes where applicable.
-4. **Threat intelligence:** Check reputation and context without opening suspicious links or executing attachments.
-5. **Assessment:** Document supporting and contradicting evidence; assign a justified verdict and confidence level.
-6. **Response:** Recommend reporting, blocking, quarantine, user notification, or escalation as appropriate.
-7. **Reporting:** Summarise the timeline, evidence, outcome, limitations, and lessons learned.
+**Finding:** Sample claims SPF failure, no DKIM and DMARC failure; fake helpdesk identity, mismatched reply address and urgent login request are contextual red flags.
 
-## Tools & Techniques
-Planned: **CyberChef**, **VirusTotal** (public IOC checks where safe), **Python**, email header inspection, and **MITRE ATT&CK** mapping where supported by evidence.
+### Case 002 — SPF/DKIM Pass, DMARC Fail
+- [Synthetic full headers](samples/sample-002-full-headers.md)
+- [Header and alignment walkthrough](analysis/sample-002-header-walkthrough.md)
+- [Warning signs and URL analysis](analysis/sample-002-content-url-analysis.md)
+- [Final case study — PHISH-LAB-002](reports/PHISH-LAB-002-final-case-study.md)
 
-> The tools listed above form the intended workflow; their use does not imply an investigation has been completed.
+**Finding:** In the constructed message, SPF and DKIM pass for `notices.attacker.invalid`, but neither is aligned to the displayed From domain `company.invalid`; the supplied DMARC result is fail. The urgent mailbox-revalidation message and login-themed link provide additional suspicious indicators.
 
-## Planned Repository Structure
-```text
-phishing-email-soc-investigation-lab/
-├── README.md
-├── samples/              # Sanitised, harmless sample emails only
-├── evidence/             # Redacted screenshots and extracted indicators
-├── analysis/             # Header and IOC analysis notes
-└── reports/              # Final case-study report
-```
+## Investigation workflow
+1. **Assess** — examine user report, email content, headers and potential interaction.
+2. **Contain** — recommend appropriate access protections under a real organisation's playbook.
+3. **Investigate** — compare From, Return-Path, Reply-To, SPF, DKIM, DMARC; inspect indicators safely and review approved logs if available.
+4. **Escalate** — involve appropriate incident response or identity teams for credible exposure.
+5. **Document** — record evidence, confidence, limitations, response recommendations and outcome.
 
-Folders and reports will be added as the practical investigation progresses.
+## Techniques demonstrated
+- Manual email-header parsing and SPF/DKIM/DMARC domain-alignment reasoning
+- Sender/Reply-To and Return-Path comparison
+- Phishing-content indicators: urgency, claimed authority and credential requests
+- Defanged URL assessment, hypothetical SOC triage and incident documentation
 
-## Safety & Ethics
-- Use only authorised or publicly provided, sanitised samples.
-- Do not click live suspicious links, open untrusted attachments, or execute malware.
-- Defang suspicious URLs and redact personal information, credentials, tokens, and private email content before publishing.
-- Treat third-party reputation results as supporting evidence, not definitive proof.
+**Not performed:** Live DNS or mail checks, cryptographic DKIM validation, VirusTotal lookup, link detonation, endpoint/SIEM investigation, or real account containment. These are possible future extensions, not completed work.
 
-## Expected Deliverables
-A documented email triage, header/IOC analysis, evidence-backed classification, recommended SOC response, and a final case-study report.
+## Safety and ethics
+All email samples are invented. The `.invalid` domains and `192.0.2.44` documentation IP are not live malicious IOCs. No untrusted link was visited, no malware executed, and no real user data was used. A simulated classification is not proof of an actual phishing incident.
+
+## Interview takeaway
+“Common warning signs include suspicious sender addresses, urgent language, unexpected links, and requests for sensitive information, such as passwords or login credentials. I would also review the email headers and authentication-domain alignment before making a classification.”
 
 ## Author
 **Fouzia Tamanna**  
